@@ -1,8 +1,18 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from rag import retrieve_response, generate_answer
 
 app = FastAPI()
+
+# Allow CORS from any origin (for development or testing purposes)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Be cautious using "*" in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class QueryRequest(BaseModel):
     query: str
