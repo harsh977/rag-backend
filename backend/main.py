@@ -29,3 +29,10 @@ def get_rag_response(payload: QueryRequest):
         "base_response": base_response,
         "final_answer": final_answer
     }
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+
+    port = int(os.environ.get("PORT", 10000))  # Render injects PORT, fallback for local
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
