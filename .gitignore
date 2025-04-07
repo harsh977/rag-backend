@@ -15,7 +15,7 @@ dist/
 build/
 
 # Data or model files
-*.pkl
+
 *.idx
 *.json
 
