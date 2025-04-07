@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+
+# VS Code settings
+.vscode/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Data or model files
+*.pkl
+*.idx
+*.json
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# dotenv
+.env
