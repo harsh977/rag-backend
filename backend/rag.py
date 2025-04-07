@@ -1,28 +1,29 @@
 from dotenv import load_dotenv
 load_dotenv()
-import faiss
 import pickle
 from sentence_transformers import SentenceTransformer
 import google.generativeai as genai
 import os
+import joblib
 # === Configure Gemini API ===
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
-# === Load FAISS Index + Data ===
-index = faiss.read_index("faiss_index.idx")
-with open("data.pkl", "rb") as f:
-    data = pickle.load(f)
+
+rag_data = joblib.load("data.pkl")
+
+nn = rag_data["nn"]
+texts = rag_data["texts"]
+data = rag_data["data"]
 
 # === Load Sentence Embedding Model ===
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# === RAG Retrieval ===
+# === RAG Retrieval (Scikit-learn version) ===
 def retrieve_response(query, k=1):
     query_vec = model.encode([query])
-    D, I = index.search(query_vec, k)
-    return [data[i] for i in I[0]]
+    distances, indices = nn.kneighbors(query_vec, n_neighbors=k)
+    return [data[i] for i in indices[0]]
 
 # === Gemini-Powered Enhancement ===
 def generate_answer(user_query, context, base_response):
